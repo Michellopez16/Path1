@@ -59,11 +59,12 @@ stepprint()
 
 
 cur_node = start
+x,y = moverto(cur_node)
+
 while cur_node != goal:
     print("-"*20)  
     #cur_node = queue.popleft()
-    x,y = moverto(cur_node)
-    print("Nuevo movimiento: ", x,y )
+
 
     if x == -1 and y == -1: # regresar
         
@@ -72,13 +73,23 @@ while cur_node != goal:
             x,y = path.pop()
             visited[x,y] += 1   
             print(x,y)
+            cur_node = (x,y)
+            x,y = moverto(cur_node)
+            if x != -1 and y != -1:
+                path.append( cur_node )
+                break
+        continue
             
     else:            
         path_visited.append((x,y))
         path.append((x,y))
         visited[x,y] += 1
         #queue.append((x,y))
+    
+    
     cur_node = (x,y)
+    x,y = moverto(cur_node)
+    print("Nuevo movimiento: ", x,y )        
     
     #stepprint()
 
@@ -86,4 +97,12 @@ while cur_node != goal:
 print("Fin")
 print(path)
 plt.imshow(visited,cmap='jet')
+plt.show()
+
+mapa[start] = 3
+for x,y in path:
+    mapa[x,y] = 3
+
+plt.title('mapa y path')    
+plt.imshow(mapa,cmap='jet')
 plt.show()
